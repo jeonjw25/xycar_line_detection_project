@@ -1,0 +1,5 @@
+<launch>
+    <include file="$(find xycar_motor)/launch/xycar_motor.launch"/>
+    <include file="$(find usb_cam)/launch/usb_cam-noviewer.launch"/>
+    <node name="hough_liner" pkg="a4_v1" type="hough_liner.py" output="screen"/>
+</launch>
