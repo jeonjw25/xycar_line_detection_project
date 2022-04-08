@@ -14,15 +14,15 @@ class HoughLiner(Liner):
     target_b = 128
     prev_angle = 0
     back = False
-    back_count = 20
+    back_count = 25
 
     def callback(self, msg):
         frame = self.imgmsg2numpy(msg)
         self.width_offset = 0
         self.width = msg.width
         self.height = msg.height
-        self.offset = 310
-        self.gap = 60
+        self.offset = 310 #310
+        self.gap = 60 #60
         self.lpos = self.width_offset
         self.rpos = self.width - self.width_offset
         
@@ -30,10 +30,9 @@ class HoughLiner(Liner):
             if self.back_count > 0:
                 self.back_count -= 1
                 self.controller.steer(self.prev_angle, self.back)
-                self.out.write(frame)
                 return
             else:
-                self.back_count = 20
+                self.back_count = 25
                 self.back = False
         
 
@@ -71,7 +70,7 @@ class HoughLiner(Liner):
                 if self.rpos > self.width*0.75:
                     angle = 0
                 elif self.rpos > self.width*0.5:
-                    angle = -500*((self.width*0.75 - self.rpos)/self.width)
+                    angle = -1000*((self.width*0.75 - self.rpos)/self.width)
                 elif self.rpos > self.width*0.35:
                     angle = -50
                 else:
@@ -81,7 +80,7 @@ class HoughLiner(Liner):
                 if self.lpos < self.width*0.25:
                     angle = 0
                 elif self.lpos < self.width*0.5:
-                    angle = 500*((self.lpos - self.width*0.25)/self.width)
+                    angle = 1000*((self.lpos - self.width*0.25)/self.width)
                 elif self.lpos < self.width*0.65:
                     angle = 50
                 else:
@@ -116,7 +115,6 @@ class HoughLiner(Liner):
         cv2.putText(frame, str(self.lpos) + ", " + str(self.rpos), (50,440), font,1,(255,0,0),2)
         cv2.putText(frame, "mid " +str(mid), (440, 50), font,1,(255,0,0),2)
         
-        self.out.write(frame)
 
         if cv2.waitKey(10) == 27:
             self.out.release()

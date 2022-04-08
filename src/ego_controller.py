@@ -18,10 +18,13 @@ class egoController:
 
     def steer(self, angle, back=False):
         msg = xycar_motor()
-        if abs(angle) < 30:
-            msg.speed = 26
+        ab_angle = abs(angle)
+        if ab_angle < 30:
+            msg.speed = 30
+        elif ab_angle < 40:
+            msg.speed = 25
         else:     
-            msg.speed = 18
+            msg.speed = 20
         
         msg.angle = angle
         if back:
