@@ -21,11 +21,11 @@ class Liner:
         # 26, 0.30803, 0.0005, 0.000372
         # 26, 0.308025, 0.0005, 0.000372
         # 26, 0.308025, 0.00051, 0.000373
-        self.s_pid = PID(0.3080265, 0.00051, 0.000373)
-        self.c_pid = PID(0.8, 0.0005, 0.00005)
+        self.s_pid = PID(0.308025, 0.00051, 0.000373)
+        self.c_pid = PID(0.5, 0.0005, 0.00005)
         self.controller = egoController()
         self.controller.steer(0)
-        time.sleep(1)
+        time.sleep(3)
     
     def imgmsg2numpy(self, msg):
         return self.bridge.imgmsg_to_cv2(msg, desired_encoding='passthrough')

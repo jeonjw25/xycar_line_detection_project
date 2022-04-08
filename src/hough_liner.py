@@ -14,7 +14,7 @@ class HoughLiner(Liner):
     target_b = 128
     prev_angle = 0
     back = False
-    back_count = 25
+    back_count = 20
 
     def callback(self, msg):
         frame = self.imgmsg2numpy(msg)
@@ -32,7 +32,7 @@ class HoughLiner(Liner):
                 self.controller.steer(self.prev_angle, self.back)
                 return
             else:
-                self.back_count = 25
+                self.back_count = 20
                 self.back = False
         
 
@@ -46,7 +46,7 @@ class HoughLiner(Liner):
         
         gray = gray + np.uint8(self.target_b - curr_b)
 
-        ret, gray = cv2.threshold(gray, 124, 255, cv2.THRESH_BINARY_INV)
+        ret, gray = cv2.threshold(gray, 122, 255, cv2.THRESH_BINARY_INV)
         #cv2.imshow("gray", gray)
         
         edge = cv2.Canny(np.uint8(gray), low_thres, high_thres)
@@ -67,24 +67,26 @@ class HoughLiner(Liner):
             frame = self.draw_rectangle(frame)
             
             if self.lpos == self.width_offset:
-                if self.rpos > self.width*0.75:
+                # 0.7
+                if self.rpos > self.width*0.67:
                     angle = 0
-                elif self.rpos > self.width*0.5:
-                    angle = -1000*((self.width*0.75 - self.rpos)/self.width)
-                elif self.rpos > self.width*0.35:
-                    angle = -50
+                #elif self.rpos > self.width*0.5:
+                #    angle = -100*((self.width*0.75 - self.rpos)/self.width)
+                elif self.rpos > self.width*0.29:
+                    angle = -60
                 else:
-                    angle = 50
+                    angle = 60
                     self.back = True
             elif self.rpos == self.width - self.width_offset:
-                if self.lpos < self.width*0.25:
+                # 0.3
+                if self.lpos < self.width*0.31:
                     angle = 0
-                elif self.lpos < self.width*0.5:
-                    angle = 1000*((self.lpos - self.width*0.25)/self.width)
-                elif self.lpos < self.width*0.65:
-                    angle = 50
+                #elif self.lpos < self.width*0.5:
+                #    angle = 100*((self.lpos - self.width*0.25)/self.width)
+                elif self.lpos < self.width*0.72:
+                    angle = 60
                 else:
-                    angle = -50
+                    angle = -60
                     self.back = True
             else:                
                 center = (self.lpos + self.rpos)/2

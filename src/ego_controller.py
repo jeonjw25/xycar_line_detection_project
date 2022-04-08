@@ -8,6 +8,7 @@ class egoController:
     def __init__(self):
         # rospy.init_node('ego_controller')
         self.pub = rospy.Publisher('xycar_motor', xycar_motor)
+        self.d = 20
 
     # def go(self):
     #     msg = xycar_motor()
@@ -19,14 +20,20 @@ class egoController:
     def steer(self, angle, back=False):
         msg = xycar_motor()
         ab_angle = abs(angle)
-        if ab_angle < 30:
-            msg.speed = 30
-        elif ab_angle < 40:
-            msg.speed = 25
+        # 30, 25, 20
+        if abs(angle) >= 50:
+            self.d = 20
+        else:
+            if self.d > 0:
+                self.d -= 1 
+        if ab_angle < 40:
+            msg.speed = 30 - self.d
+        # elif ab_angle < 40:
+        #     msg.speed = 30 - self.d
         else:     
             msg.speed = 20
         
         msg.angle = angle
         if back:
-            msg.speed = -5
+            msg.speed = -8
         self.pub.publish(msg)
